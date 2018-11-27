@@ -1,102 +1,151 @@
 'use strict';
 
-/* *************************
-** generating mockup data **
-************************* */
+var PIN_X_PADDING = 50;
+var MIN_PIN_Y = 130;
+var MAX_PIN_Y = 630;
+var OFFER_TITLES = [
+  'Большая уютная квартира',
+  'Маленькая неуютная квартира',
+  'Огромный прекрасный дворец',
+  'Маленький ужасный дворец',
+  'Красивый гостевой домик',
+  'Некрасивый негостеприимный домик',
+  'Уютное бунгало далеко от моря',
+  'Неуютное бунгало по колено в воде'
+];
+var MIN_PRICE = 1000;
+var MAX_PRICE = 1000000;
+var OFFER_TYPE = ['palace', 'flat', 'house', 'bungalo'];
+var MIN_ROOMS = 1;
+var MAX_ROOMS = 5;
+var MIN_GUESTS = 1;
+var MAX_GUESTS = 10;
+var CHECKIN_TIMES = ['12:00', '13:00', '14:00'];
+var CHECKOUT_TIMES = ['12:00', '13:00', '14:00'];
+var OFFER_FEATURES = ['wifi', 'dishwasher', 'parking', 'washer', 'elevator', 'conditioner'];
+var OFFER_PHOTOS = [
+  'http://o0.github.io/assets/images/tokyo/hotel1.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel2.jpg',
+  'http://o0.github.io/assets/images/tokyo/hotel3.jpg'
+];
 
-// creating a closure to get unique random avatar url
-var createAvatarPool = function () {
-  var urlPreset = 'img/avatars/user';
-  var urls = [];
-  for (var i = 1; i < 9; i++) {
-    urls.push(urlPreset + '0' + i + '.png');
-  }
 
-  return function () {
-    // pull and return random url from urls array
-    return urls.splice(Math.floor(Math.random() * urls.length), 1)[0];
-  };
-};
-
-var getAvatarUrl = createAvatarPool();
-
-// creating a closure to get unique offer text
-var createOfferTitlesPool = function () {
-  var offerTitles = [
-    'Большая уютная квартира',
-    'Маленькая неуютная квартира',
-    'Огромный прекрасный дворец',
-    'Маленький ужасный дворец',
-    'Красивый гостевой домик',
-    'Некрасивый негостеприимный домик',
-    'Уютное бунгало далеко от моря',
-    'Неуютное бунгало по колено в воде'
-  ];
-
-  return function () {
-    // pull and return random title from offerTitles array
-    return offerTitles.splice(Math.floor(Math.random() * offerTitles.length), 1)[0];
-  };
-};
-
-var getOfferTitle = createOfferTitlesPool();
-
-// getting random integer number from min to max
+/**
+ * Utility function.
+ * Returns random integer number in range from <min> to <max>.
+ * @param {number} min Min number
+ * @param {number} max Max number
+ * @return {number}
+ */
 var getRandomNumber = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-// getting random element form an array
+/**
+ * Utility function.
+ * Returning random element form an array.
+ * @param {Array} array
+ * @return {*} Random array element
+ */
 var getRandomArrayElement = function (array) {
   return array[Math.floor(Math.random() * array.length)];
 };
 
-// generating random user data
-var generateUser = function () {
-  var user = {};
-  user.author = {};
-  user.author.avatar = getAvatarUrl();
+/**
+ * Returns an array of random elements from another array
+ * @param {Array} array
+ * @return {Array}
+ */
+var getRandomElements = function (array) {
+  var elements = [];
+  for (var i = 0; i < array.length; i++) {
+    if (!getRandomNumber(0, 1)) { // just flipping the coin here
+      elements.push(array[i]);
+    }
+  }
+  return elements;
+};
+
+/**
+ * Returns an array of shuffled elements from another array
+ * (Using Knuth-Fisher-Yates shuffle algorithm)
+ * @param {Array} array
+ * @return {Array}
+ */
+var getShuffledArray = function (array) {
+  var shuffledArr = array.slice(0); // cloning an array
+  for (var i = shuffledArr.length - 1; i > 0; i--) {
+    var index = getRandomNumber(0, i);
+    var temp = shuffledArr[index];
+    shuffledArr[index] = shuffledArr[i];
+    shuffledArr[i] = temp;
+  }
+  return shuffledArr;
+};
+
+
+/* *************************
+** generating mockup data **
+************************* */
+/**
+ * Generating avatar url.
+ * @param  {number} index id of avatar
+ * @return {string} Avatar url
+ */
+var getAvatarUrl = function (index) {
+  return 'img/avatars/user0' + index + '.png';
+};
+
+
+/**
+ * Generating random offer
+ * @param {number} index
+ * @return {Object}
+ */
+var generateRandomOffer = function (index) {
+  var offer = {};
+  offer.author = {};
+  offer.author.avatar = getAvatarUrl(index + 1);
 
   var map = document.querySelector('.map');
-  user.location = {};
-  user.location.x = getRandomNumber(1, map.clientWidth);
-  user.location.y = getRandomNumber(130, 630);
+  offer.location = {};
+  offer.location.x = getRandomNumber(PIN_X_PADDING, map.clientWidth - PIN_X_PADDING);
+  offer.location.y = getRandomNumber(MIN_PIN_Y, MAX_PIN_Y);
 
-  user.offer = {};
-  user.offer.title = getOfferTitle();
-  user.offer.address = user.location.x + ', ' + user.location.y;
-  user.offer.price = getRandomNumber(1000, 1000000);
-  user.offer.type = getRandomArrayElement([
-    'palace',
-    'flat',
-    'house',
-    'bungalo'
-  ]);
-  user.offer.rooms = getRandomNumber(1, 5);
-  user.offer.guests = getRandomNumber(1, 5);
-  user.offer.checkin = getRandomArrayElement(['12:00', '13:00', '14:00']);
-  user.offer.checkout = getRandomArrayElement(['12:00', '13:00', '14:00']);
-  // user.offer.features = getRandomFeatures();
-  user.offer.description = '';
-  // user.offer.photos =
+  offer.offer = {};
+  offer.offer.title = OFFER_TITLES[index];
+  offer.offer.address = offer.location.x + ', ' + offer.location.y;
+  offer.offer.price = getRandomNumber(MIN_PRICE, MAX_PRICE);
+  offer.offer.type = getRandomArrayElement(OFFER_TYPE);
+  offer.offer.rooms = getRandomNumber(MIN_ROOMS, MAX_ROOMS);
+  offer.offer.guests = getRandomNumber(MIN_GUESTS, MAX_GUESTS);
+  offer.offer.checkin = getRandomArrayElement(CHECKIN_TIMES);
+  offer.offer.checkout = getRandomArrayElement(CHECKOUT_TIMES);
+  offer.offer.features = getRandomElements(OFFER_FEATURES);
+  offer.offer.description = '';
+  offer.offer.photos = getShuffledArray(OFFER_PHOTOS);
 
-  return user;
+  return offer;
 };
 
-// generating users array
-var generateUsers = function () {
-  var users = [];
-  for (var i = 0; i < 8; i++) {
-    users.push(generateUser());
+/**
+ * Generating an array of random offers
+ * @param {number} num Number of offers
+ * @return {Array}
+ */
+var generateRandomOffers = function (num) {
+  var offers = [];
+  for (var i = 0; i < num; i++) {
+    offers.push(generateRandomOffer(i));
   }
 
-  return users;
+  return offers;
 };
 
 
-/* **************
-** showing map **
-************** */
+/**
+ * Showing the map
+ */
 var showMap = function () {
   var map = document.querySelector('.map');
   map.classList.remove('map--faded');
@@ -122,18 +171,19 @@ var renderPin = function (pinData) {
 // rendering 8 pins into a fragment
 var renderPinsFragment = function (userData) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < 8; i++) {
+  for (var i = 0; i < userData.length; i++) {
     var pin = renderPin(userData[i]);
     fragment.appendChild(pin);
   }
   return fragment;
 };
 
-var pinsFragment = renderPinsFragment(generateUsers());
 
+
+var pinsFragment = renderPinsFragment(generateRandomOffers(8));
 document.querySelector('.map__pins').appendChild(pinsFragment);
 
-console.log(renderPin(generateUser()));
+console.log(renderPin(generateRandomOffer()));
 
 console.log(pinTemplate);
 
