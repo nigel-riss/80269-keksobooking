@@ -34,11 +34,12 @@ var OFFER_TYPE_DICTIONARY = {
   house: 'Дом',
   bungalo: 'Бунгало'
 };
+var OFFERS_COUNT = 8;
 
 
 /**
  * Utility function.
- * Returns random integer number in range from <min> to <max>.
+ * Return random integer number in range from <min> to <max>.
  * @param {number} min Min number
  * @param {number} max Max number
  * @return {number}
@@ -49,7 +50,7 @@ var getRandomNumber = function (min, max) {
 
 /**
  * Utility function.
- * Returning random element form an array.
+ * Return random element form an array.
  * @param {Array} array
  * @return {*} Random array element
  */
@@ -58,7 +59,7 @@ var getRandomArrayElement = function (array) {
 };
 
 /**
- * Returns an array of random elements from another array
+ * Return an array of random elements from another array
  * @param {Array} array
  * @return {Array}
  */
@@ -73,7 +74,7 @@ var getRandomElements = function (array) {
 };
 
 /**
- * Returns an array of shuffled elements from another array
+ * Return an array of shuffled elements from another array
  * (Using Knuth-Fisher-Yates shuffle algorithm)
  * @param {Array} array
  * @return {Array}
@@ -94,7 +95,7 @@ var getShuffledArray = function (array) {
 ** generating mockup data **
 ************************* */
 /**
- * Generating avatar url.
+ * Generate avatar url.
  * @param  {number} index id of avatar
  * @return {string} Avatar url
  */
@@ -104,7 +105,7 @@ var getAvatarUrl = function (index) {
 
 
 /**
- * Generating random offer
+ * Generate random offer
  * @param {number} index
  * @return {Object}
  */
@@ -135,7 +136,7 @@ var generateRandomOffer = function (index) {
 };
 
 /**
- * Generating an array of random offers
+ * Generate an array of random offers
  * @param {number} num Number of offers
  * @return {Array}
  */
@@ -150,7 +151,7 @@ var generateRandomOffers = function (num) {
 
 
 /**
- * Showing the map
+ * Show the map
  */
 var showMap = function () {
   var map = document.querySelector('.map');
@@ -163,7 +164,11 @@ var showMap = function () {
 ********************* */
 var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
-// rendering one pin
+/**
+ * Render a pin
+ * @param {Object} pinData
+ * @return {HTMLElement}
+ */
 var renderPin = function (pinData) {
   var pin = pinTemplate.cloneNode(true);
   var pinImage = pin.children[0];
@@ -174,40 +179,45 @@ var renderPin = function (pinData) {
   return pin;
 };
 
-// rendering 8 pins into a fragment
-var renderPinsFragment = function (userData) {
+
+/**
+ * Render document fragment of pins
+ * @param {Array} offerData Array of offer data objects
+ * @return {DocumentFragment}
+ */
+var renderPinsFragment = function (offerData) {
   var fragment = document.createDocumentFragment();
-  for (var i = 0; i < userData.length; i++) {
-    var pin = renderPin(userData[i]);
+  for (var i = 0; i < offerData.length; i++) {
+    var pin = renderPin(offerData[i]);
     fragment.appendChild(pin);
   }
   return fragment;
 };
 
-var randomOffers = generateRandomOffers(8);
-var pinsFragment = renderPinsFragment(randomOffers);
-document.querySelector('.map__pins').appendChild(pinsFragment);
 
-
-// rendering card
-var renderCard = function () {
+/**
+ * Render offer card
+ * @param {Object} offerData
+ * @return {HTMLElement}
+ */
+var renderCard = function (offerData) {
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var card = cardTemplate.cloneNode(true);
-  var offerData = randomOffers[0];
 
+  // text content
   card.querySelector('.popup__title').textContent = offerData.offer.title;
   card.querySelector('.popup__text--address').textContent = offerData.offer.address;
   card.querySelector('.popup__text--price').textContent = offerData.offer.price + '₽/ночь';
   card.querySelector('.popup__type').textContent = OFFER_TYPE_DICTIONARY[offerData.offer.type];
   card.querySelector('.popup__text--capacity').textContent = offerData.offer.rooms + ' комнаты для ' + offerData.offer.guests + ' гостей';
   card.querySelector('.popup__text--time').textContent = 'Заезд после ' + offerData.offer.checkin + ' выезд до ' + offerData.offer.checkout;
-  
-  // cleaning features list
+  card.querySelector('.popup__description').textContent = offerData.offer.description;
+
+  // features
   var featuresList = card.querySelector('.popup__features');
-  while (featuresList.firstChild) {
+  while (featuresList.firstChild) { // cleaning features list
     featuresList.removeChild(featuresList.firstChild);
   }
-
   for (var i = 0; i < offerData.offer.features.length; i++) {
     var feature = document.createElement('li');
     feature.classList.add('popup__feature');
@@ -215,8 +225,7 @@ var renderCard = function () {
     featuresList.appendChild(feature);
   }
 
-  card.querySelector('.popup__description').textContent = offerData.offer.description;
-
+  // photos
   var photos = card.querySelector('.popup__photos');
   var photosTemplate = photos.removeChild(photos.querySelector('img'));
   for (var j = 0; j < offerData.offer.photos.length; j++) {
@@ -225,13 +234,25 @@ var renderCard = function () {
     photos.appendChild(photo);
   }
 
+  // avatar
   card.querySelector('.popup__avatar').src = offerData.author.avatar;
 
   return card;
 };
 
-var map = document.querySelector('.map');
-var filtersContainer = document.querySelector('.map__filters-container');
-map.insertBefore(renderCard(), filtersContainer);
 
+// showing the map
 showMap();
+
+// generating random offers
+var randomOffers = generateRandomOffers(OFFERS_COUNT);
+
+// rendering and showing pins
+var pinsFragment = renderPinsFragment(randomOffers);
+document.querySelector('.map__pins').appendChild(pinsFragment);
+
+// rendering and showing popup
+var map = document.querySelector('.map');
+var popup = renderCard(randomOffers[0]);
+var filtersContainer = document.querySelector('.map__filters-container');
+map.insertBefore(popup, filtersContainer);
