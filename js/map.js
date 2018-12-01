@@ -244,13 +244,6 @@ var renderCard = function (offerData) {
 
   Module 4 task 1
 
-  // generating random offers
-  var randomOffers = generateRandomOffers(OFFERS_COUNT);
-
-  // rendering and showing pins
-  var pinsFragment = renderPinsFragment(randomOffers);
-  document.querySelector('.map__pins').appendChild(pinsFragment);
-
   // rendering and showing popup
   var map = document.querySelector('.map');
   var popup = renderCard(randomOffers[0]);
@@ -260,7 +253,7 @@ var renderCard = function (offerData) {
 
 
 /**
- * Setting form fieldsets state
+ * Set form fieldsets state
  * @param {boolean} isEnabled
  */
 var setFieldsetsState = function (isEnabled) {
@@ -270,20 +263,36 @@ var setFieldsetsState = function (isEnabled) {
   }
 };
 
+/**
+ * Activate advertisement form
+ */
 var activateAdForm = function () {
   var adForm = document.querySelector('.ad-form');
   adForm.classList.remove('ad-form--disabled');
   setFieldsetsState(true);
 };
 
-// Disabling fieldsets
-setFieldsetsState(false);
+/**
+ * Adding random pins on map
+ */
+var addRandomPins = function () {
+  // rendering and showing pins
+  var pinsFragment = renderPinsFragment(randomOffers);
+  document.querySelector('.map__pins').appendChild(pinsFragment);
+};
 
 /**
  * Emulating main pin drag-n-drop
  */
 var mainPin = document.querySelector('.map__pin--main');
 mainPin.addEventListener('mouseup', function () {
+  addRandomPins();
   showMap();
   activateAdForm();
 });
+
+// Disabling fieldsets
+setFieldsetsState(false);
+
+// Generating random offers
+var randomOffers = generateRandomOffers(OFFERS_COUNT);
