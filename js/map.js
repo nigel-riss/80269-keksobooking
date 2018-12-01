@@ -241,8 +241,8 @@ var renderCard = function (offerData) {
 };
 
 /* Setting to default state
-  // showing the map
-  showMap();
+
+  Module 4 task 1
 
   // generating random offers
   var randomOffers = generateRandomOffers(OFFERS_COUNT);
@@ -257,3 +257,33 @@ var renderCard = function (offerData) {
   var filtersContainer = document.querySelector('.map__filters-container');
   map.insertBefore(popup, filtersContainer);
 */
+
+
+/**
+ * Setting form fieldsets state
+ * @param {boolean} isEnabled
+ */
+var setFieldsetsState = function (isEnabled) {
+  var fieldsets = document.querySelectorAll('.ad-form fieldset');
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = !isEnabled;
+  }
+};
+
+var activateAdForm = function () {
+  var adForm = document.querySelector('.ad-form');
+  adForm.classList.remove('ad-form--disabled');
+  setFieldsetsState(true);
+};
+
+// Disabling fieldsets
+setFieldsetsState(false);
+
+/**
+ * Emulating main pin drag-n-drop
+ */
+var mainPin = document.querySelector('.map__pin--main');
+mainPin.addEventListener('mouseup', function () {
+  showMap();
+  activateAdForm();
+});
