@@ -240,19 +240,20 @@ var renderCard = function (offerData) {
   return card;
 };
 
+/* Setting to default state
+  // showing the map
+  showMap();
 
-// showing the map
-showMap();
+  // generating random offers
+  var randomOffers = generateRandomOffers(OFFERS_COUNT);
 
-// generating random offers
-var randomOffers = generateRandomOffers(OFFERS_COUNT);
+  // rendering and showing pins
+  var pinsFragment = renderPinsFragment(randomOffers);
+  document.querySelector('.map__pins').appendChild(pinsFragment);
 
-// rendering and showing pins
-var pinsFragment = renderPinsFragment(randomOffers);
-document.querySelector('.map__pins').appendChild(pinsFragment);
-
-// rendering and showing popup
-var map = document.querySelector('.map');
-var popup = renderCard(randomOffers[0]);
-var filtersContainer = document.querySelector('.map__filters-container');
-map.insertBefore(popup, filtersContainer);
+  // rendering and showing popup
+  var map = document.querySelector('.map');
+  var popup = renderCard(randomOffers[0]);
+  var filtersContainer = document.querySelector('.map__filters-container');
+  map.insertBefore(popup, filtersContainer);
+*/
