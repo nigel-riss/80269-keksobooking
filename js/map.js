@@ -302,6 +302,7 @@ var setAddressField = function (x, y) {
   x = Math.round(x);
   y = Math.round(y);
   addressInput.value = x + ', ' + y;
+  addressInput.readOnly = true;
 };
 
 
@@ -309,7 +310,7 @@ var setAddressField = function (x, y) {
  * Listen to pin clicks
  */
 var addPinsClickListeners = function () {
-  var mapPins = document.querySelectorAll('.map__pin');
+  var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
   for (var i = 0; i < mapPins.length; i++) {
     mapPins[i].addEventListener('click', function (evt) {
       var pin = evt.currentTarget;
