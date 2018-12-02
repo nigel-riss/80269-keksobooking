@@ -169,10 +169,12 @@ var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pi
 /**
  * Render a pin
  * @param {Object} pinData
+ * @param {number} pinID
  * @return {HTMLElement}
  */
-var renderPin = function (pinData) {
+var renderPin = function (pinData, pinID) {
   var pin = pinTemplate.cloneNode(true);
+  pin.dataset.pinId = pinID;
   var pinImage = pin.children[0];
   pin.style.left = (pinData.location.x - pin.clientWidth / 2) + 'px';
   pin.style.top = (pinData.location.y - pin.clientHeight) + 'px';
@@ -190,7 +192,7 @@ var renderPin = function (pinData) {
 var renderPinsFragment = function (offerData) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < offerData.length; i++) {
-    var pin = renderPin(offerData[i]);
+    var pin = renderPin(offerData[i], i);
     fragment.appendChild(pin);
   }
   return fragment;
@@ -199,13 +201,16 @@ var renderPinsFragment = function (offerData) {
 
 /**
  * Render offer card
- * @param {Object} offerData
  * @return {HTMLElement}
  */
-var renderCard = function (offerData) {
+var renderCard = function () {
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var card = cardTemplate.cloneNode(true);
 
+  return card;
+};
+
+var fillInCard = function (card, offerData) {
   // text content
   card.querySelector('.popup__title').textContent = offerData.offer.title;
   card.querySelector('.popup__text--address').textContent = offerData.offer.address;
@@ -230,6 +235,9 @@ var renderCard = function (offerData) {
   // photos
   var photos = card.querySelector('.popup__photos');
   var photosTemplate = photos.removeChild(photos.querySelector('img'));
+  while (photos.firstChild) { // cleaning photos list
+    photos.removeChild(photos.firstChild);
+  }
   for (var j = 0; j < offerData.offer.photos.length; j++) {
     var photo = photosTemplate.cloneNode(true);
     photo.src = offerData.offer.photos[j];
@@ -241,17 +249,6 @@ var renderCard = function (offerData) {
 
   return card;
 };
-
-/* Setting to default state
-
-  Module 4 task 1
-
-  // rendering and showing popup
-  var map = document.querySelector('.map');
-  var popup = renderCard(randomOffers[0]);
-  var filtersContainer = document.querySelector('.map__filters-container');
-  map.insertBefore(popup, filtersContainer);
-*/
 
 
 /**
@@ -290,6 +287,7 @@ var mainPin = document.querySelector('.map__pin--main');
 mainPin.addEventListener('mouseup', function () {
   setAddressField(mainPin.offsetLeft + MAIN_PIN_WIDTH / 2, mainPin.offsetTop + MAIN_PIN_HEIGHT);
   addRandomPins();
+  addPinsClickListeners();
   showMap();
   activateAdForm();
 });
@@ -306,6 +304,44 @@ var setAddressField = function (x, y) {
   addressInput.value = x + ', ' + y;
 };
 
+
+/**
+ * Listen to pin clicks
+ */
+var addPinsClickListeners = function () {
+  var mapPins = document.querySelectorAll('.map__pin');
+  for (var i = 0; i < mapPins.length; i++) {
+    mapPins[i].addEventListener('click', function (evt) {
+      var pin = evt.currentTarget;
+      if (pin.dataset.pinId) {
+        fillInCard(popup, randomOffers[pin.dataset.pinId]);
+        showPopup();
+      }
+    });
+  }
+};
+
+/**
+ * Show popup
+ */
+var map = document.querySelector('.map');
+var showPopup = function () {
+  var filtersContainer = document.querySelector('.map__filters-container');
+  map.insertBefore(popup, filtersContainer);
+
+  var popupCloseBtn = map.querySelector('.popup__close');
+  popupCloseBtn.addEventListener('click', function () {
+    hidePopup();
+  });
+};
+
+/**
+ * Hide popup
+ */
+var hidePopup = function () {
+  map.removeChild(popup);
+};
+
 // Disabling fieldsets
 setFieldsetsState(false);
 
@@ -314,3 +350,7 @@ setAddressField(mainPin.offsetLeft + mainPin.offsetWidth / 2, mainPin.offsetTop 
 
 // Generating random offers
 var randomOffers = generateRandomOffers(OFFERS_COUNT);
+
+// Creating popup
+var popup = fillInCard(renderCard(), randomOffers[0]);
+
