@@ -3,6 +3,8 @@
 var PIN_X_PADDING = 50;
 var MIN_PIN_Y = 130;
 var MAX_PIN_Y = 630;
+var MAIN_PIN_WIDTH = 65;
+var MAIN_PIN_HEIGHT = 81;
 var OFFER_TITLES = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
@@ -167,10 +169,12 @@ var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pi
 /**
  * Render a pin
  * @param {Object} pinData
+ * @param {number} pinID
  * @return {HTMLElement}
  */
-var renderPin = function (pinData) {
+var renderPin = function (pinData, pinID) {
   var pin = pinTemplate.cloneNode(true);
+  pin.dataset.pinId = pinID;
   var pinImage = pin.children[0];
   pin.style.left = (pinData.location.x - pin.clientWidth / 2) + 'px';
   pin.style.top = (pinData.location.y - pin.clientHeight) + 'px';
@@ -188,7 +192,7 @@ var renderPin = function (pinData) {
 var renderPinsFragment = function (offerData) {
   var fragment = document.createDocumentFragment();
   for (var i = 0; i < offerData.length; i++) {
-    var pin = renderPin(offerData[i]);
+    var pin = renderPin(offerData[i], i);
     fragment.appendChild(pin);
   }
   return fragment;
@@ -197,13 +201,16 @@ var renderPinsFragment = function (offerData) {
 
 /**
  * Render offer card
- * @param {Object} offerData
  * @return {HTMLElement}
  */
-var renderCard = function (offerData) {
+var renderCard = function () {
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var card = cardTemplate.cloneNode(true);
 
+  return card;
+};
+
+var fillInCard = function (card, offerData) {
   // text content
   card.querySelector('.popup__title').textContent = offerData.offer.title;
   card.querySelector('.popup__text--address').textContent = offerData.offer.address;
@@ -228,6 +235,9 @@ var renderCard = function (offerData) {
   // photos
   var photos = card.querySelector('.popup__photos');
   var photosTemplate = photos.removeChild(photos.querySelector('img'));
+  while (photos.firstChild) { // cleaning photos list
+    photos.removeChild(photos.firstChild);
+  }
   for (var j = 0; j < offerData.offer.photos.length; j++) {
     var photo = photosTemplate.cloneNode(true);
     photo.src = offerData.offer.photos[j];
@@ -241,18 +251,107 @@ var renderCard = function (offerData) {
 };
 
 
-// showing the map
-showMap();
+/**
+ * Set form fieldsets state
+ * @param {boolean} isEnabled
+ */
+var setFieldsetsState = function (isEnabled) {
+  var fieldsets = document.querySelectorAll('.ad-form fieldset');
+  for (var i = 0; i < fieldsets.length; i++) {
+    fieldsets[i].disabled = !isEnabled;
+  }
+};
 
-// generating random offers
+/**
+ * Activate advertisement form
+ */
+var activateAdForm = function () {
+  var adForm = document.querySelector('.ad-form');
+  adForm.classList.remove('ad-form--disabled');
+  setFieldsetsState(true);
+};
+
+/**
+ * Adding random pins on map
+ */
+var addRandomPins = function () {
+  // rendering and showing pins
+  var pinsFragment = renderPinsFragment(randomOffers);
+  document.querySelector('.map__pins').appendChild(pinsFragment);
+};
+
+/**
+ * Emulating main pin drag-n-drop
+ */
+var mainPin = document.querySelector('.map__pin--main');
+mainPin.addEventListener('mouseup', function () {
+  setAddressField(mainPin.offsetLeft + MAIN_PIN_WIDTH / 2, mainPin.offsetTop + MAIN_PIN_HEIGHT);
+  addRandomPins();
+  addPinsClickListeners();
+  showMap();
+  activateAdForm();
+});
+
+/**
+ * Setting Address Field
+ * @param {number} x the X coord of main pin
+ * @param {number} y the Y coord of main pin
+ */
+var setAddressField = function (x, y) {
+  var addressInput = document.querySelector('.ad-form input[name="address"]');
+  x = Math.round(x);
+  y = Math.round(y);
+  addressInput.value = x + ', ' + y;
+  addressInput.readOnly = true;
+};
+
+
+/**
+ * Listen to pin clicks
+ */
+var addPinsClickListeners = function () {
+  var mapPins = document.querySelectorAll('.map__pin:not(.map__pin--main)');
+  for (var i = 0; i < mapPins.length; i++) {
+    mapPins[i].addEventListener('click', function (evt) {
+      var pin = evt.currentTarget;
+      if (pin.dataset.pinId) {
+        fillInCard(popup, randomOffers[pin.dataset.pinId]);
+        showPopup();
+      }
+    });
+  }
+};
+
+/**
+ * Show popup
+ */
+var map = document.querySelector('.map');
+var showPopup = function () {
+  var filtersContainer = document.querySelector('.map__filters-container');
+  map.insertBefore(popup, filtersContainer);
+
+  var popupCloseBtn = map.querySelector('.popup__close');
+  popupCloseBtn.addEventListener('click', function () {
+    hidePopup();
+  });
+};
+
+/**
+ * Hide popup
+ */
+var hidePopup = function () {
+  map.removeChild(popup);
+};
+
+// Disabling fieldsets
+setFieldsetsState(false);
+
+// Setting initial main pin coordinates
+setAddressField(mainPin.offsetLeft + mainPin.offsetWidth / 2, mainPin.offsetTop + mainPin.offsetHeight / 2);
+
+// Generating random offers
 var randomOffers = generateRandomOffers(OFFERS_COUNT);
 
-// rendering and showing pins
-var pinsFragment = renderPinsFragment(randomOffers);
-document.querySelector('.map__pins').appendChild(pinsFragment);
+// Creating popup
+var popup = fillInCard(renderCard(), randomOffers[0]);
 
-// rendering and showing popup
-var map = document.querySelector('.map');
-var popup = renderCard(randomOffers[0]);
-var filtersContainer = document.querySelector('.map__filters-container');
-map.insertBefore(popup, filtersContainer);
