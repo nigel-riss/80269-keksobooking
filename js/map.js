@@ -3,6 +3,8 @@
 var PIN_X_PADDING = 50;
 var MIN_PIN_Y = 130;
 var MAX_PIN_Y = 630;
+var MAIN_PIN_WIDTH = 65;
+var MAIN_PIN_HEIGHT = 81;
 var OFFER_TITLES = [
   'Большая уютная квартира',
   'Маленькая неуютная квартира',
@@ -286,13 +288,29 @@ var addRandomPins = function () {
  */
 var mainPin = document.querySelector('.map__pin--main');
 mainPin.addEventListener('mouseup', function () {
+  setAddressField(mainPin.offsetLeft + MAIN_PIN_WIDTH / 2, mainPin.offsetTop + MAIN_PIN_HEIGHT);
   addRandomPins();
   showMap();
   activateAdForm();
 });
 
+/**
+ * Setting Address Field
+ * @param {number} x the X coord of main pin
+ * @param {number} y the Y coord of main pin
+ */
+var setAddressField = function (x, y) {
+  var addressInput = document.querySelector('.ad-form input[name="address"]');
+  x = Math.round(x);
+  y = Math.round(y);
+  addressInput.value = x + ', ' + y;
+};
+
 // Disabling fieldsets
 setFieldsetsState(false);
+
+// Setting initial main pin coordinates
+setAddressField(mainPin.offsetLeft + mainPin.offsetWidth / 2, mainPin.offsetTop + mainPin.offsetHeight / 2);
 
 // Generating random offers
 var randomOffers = generateRandomOffers(OFFERS_COUNT);
