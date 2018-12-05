@@ -302,7 +302,6 @@ var setAddressField = function (x, y) {
   x = Math.round(x);
   y = Math.round(y);
   addressInput.value = x + ', ' + y;
-  addressInput.readOnly = true;
 };
 
 
