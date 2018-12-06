@@ -156,5 +156,52 @@ setTimeInputs(0);
 //
 var roomsSelect = document.querySelector('.ad-form select[name="rooms"]');
 var capacitySelect = document.querySelector('.ad-form select[name="capacity"]');
-console.log(roomsSelect);
-console.log(capacitySelect);
+
+/**
+ * Listen to rooms select input
+ */
+roomsSelect.addEventListener('input', function (evt) {
+  checkCapacityValidity(evt.target.value, capacitySelect.value);
+});
+
+/**
+ * Listen to capacity select input
+ */
+capacitySelect.addEventListener('input', function (evt) {
+  checkCapacityValidity(+roomsSelect.value, +evt.target.value);
+});
+
+/**
+ * Checks if rooms and guests quantities are adequate
+ * @param {number} rooms Number of rooms
+ * @param {number} guests Number of guests
+ */
+var checkCapacityValidity = function (rooms, guests) {
+  switch (rooms) {
+    case 1:
+    case 2:
+    case 3:
+      if (rooms < guests && guests !== 0) {
+        capacitySelect.setCustomValidity('Вы не можете поселить ' + guests + ' гостей в ' + rooms + ' комнат');
+      } else if (guests === 0) {
+        capacitySelect.setCustomValidity('Вы должны поселить до ' + rooms + ' гостей');
+      } else {
+        capacitySelect.setCustomValidity('');
+      }
+      break;
+
+    case 100:
+      if (guests !== 0) {
+        capacitySelect.setCustomValidity('Выберите пункт "Не для гостей" для 100 комнат');
+      } else {
+        capacitySelect.setCustomValidity('');
+      }
+      break;
+
+    default:
+      break;
+  }
+};
+
+// Setting initial validity for capacity select
+checkCapacityValidity(roomsSelect.value, capacitySelect.value);
