@@ -38,6 +38,7 @@ var OFFER_TYPE_DICTIONARY = {
 };
 var OFFERS_COUNT = 8;
 
+var ESC_KEY = 27;
 
 /**
  * Utility function.
@@ -342,6 +343,16 @@ var hidePopup = function () {
   map.removeChild(popup);
 };
 
+/**
+ * Remove popup on ESC
+ */
+document.addEventListener('keydown', function (evt) {
+  evt.preventDefault();
+  if (evt.keyCode === ESC_KEY) {
+    hidePopup();
+  }
+});
+
 // Disabling fieldsets
 setFieldsetsState(false);
 
@@ -353,4 +364,3 @@ var randomOffers = generateRandomOffers(OFFERS_COUNT);
 
 // Creating popup
 var popup = fillInCard(renderCard(), randomOffers[0]);
-
