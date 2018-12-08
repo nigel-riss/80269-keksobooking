@@ -1,5 +1,12 @@
 'use strict';
 
+var TIME_TO_PRICE_MAP = {
+  bungalo: 0,
+  flat: 1000,
+  house: 5000,
+  palace: 10000
+};
+
 //
 // Title input validation
 //
@@ -58,30 +65,8 @@ var priceInput = document.querySelector('.ad-form input[name="price"]');
  * @param {string} type
  */
 var setupPriceInput = function (type) {
-  switch (type) {
-    case 'bungalo':
-      priceInput.min = '0';
-      priceInput.placeholder = '0';
-      break;
-
-    case 'flat':
-      priceInput.min = '1000';
-      priceInput.placeholder = '1000';
-      break;
-
-    case 'house':
-      priceInput.min = '5000';
-      priceInput.placeholder = '5000';
-      break;
-
-    case 'palace':
-      priceInput.min = '10000';
-      priceInput.placeholder = '10000';
-      break;
-
-    default:
-      break;
-  }
+  priceInput.min = TIME_TO_PRICE_MAP[type];
+  priceInput.placeholder = TIME_TO_PRICE_MAP[type];
 };
 
 /**
