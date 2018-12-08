@@ -354,5 +354,3 @@ var randomOffers = generateRandomOffers(OFFERS_COUNT);
 // Creating popup
 var popup = fillInCard(renderCard(), randomOffers[0]);
 
-// TODO: remove this
-activateAdForm();

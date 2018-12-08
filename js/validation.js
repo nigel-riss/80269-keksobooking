@@ -146,7 +146,7 @@ var capacitySelect = document.querySelector('.ad-form select[name="capacity"]');
  * Listen to rooms select input
  */
 roomsSelect.addEventListener('input', function (evt) {
-  checkCapacityValidity(evt.target.value, capacitySelect.value);
+  checkCapacityValidity(+evt.target.value, +capacitySelect.value);
 });
 
 /**
@@ -189,4 +189,4 @@ var checkCapacityValidity = function (rooms, guests) {
 };
 
 // Setting initial validity for capacity select
-checkCapacityValidity(roomsSelect.value, capacitySelect.value);
+checkCapacityValidity(+roomsSelect.value, +capacitySelect.value);
