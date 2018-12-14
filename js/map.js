@@ -38,59 +38,6 @@ var OFFERS_COUNT = 8;
 
 var ESC_KEY = 27;
 
-/**
- * Utility function.
- * Return random integer number in range from <min> to <max>.
- * @param {number} min Min number
- * @param {number} max Max number
- * @return {number}
- */
-var getRandomNumber = function (min, max) {
-  return Math.floor(Math.random() * (max - min + 1) + min);
-};
-
-/**
- * Utility function.
- * Return random element form an array.
- * @param {Array} array
- * @return {*} Random array element
- */
-var getRandomArrayElement = function (array) {
-  return array[Math.floor(Math.random() * array.length)];
-};
-
-/**
- * Return an array of random elements from another array
- * @param {Array} array
- * @return {Array}
- */
-var getRandomElements = function (array) {
-  var elements = [];
-  for (var i = 0; i < array.length; i++) {
-    if (!getRandomNumber(0, 1)) { // just flipping the coin here
-      elements.push(array[i]);
-    }
-  }
-  return elements;
-};
-
-/**
- * Return an array of shuffled elements from another array
- * (Using Knuth-Fisher-Yates shuffle algorithm)
- * @param {Array} array
- * @return {Array}
- */
-var getShuffledArray = function (array) {
-  var shuffledArr = array.slice(0); // cloning an array
-  for (var i = shuffledArr.length - 1; i > 0; i--) {
-    var index = getRandomNumber(0, i);
-    var temp = shuffledArr[index];
-    shuffledArr[index] = shuffledArr[i];
-    shuffledArr[i] = temp;
-  }
-  return shuffledArr;
-};
-
 
 /* *************************
 ** generating mockup data **
@@ -117,21 +64,21 @@ var generateRandomOffer = function (index) {
 
   var map = document.querySelector('.map');
   offer.location = {};
-  offer.location.x = getRandomNumber(PIN_X_PADDING, map.clientWidth - PIN_X_PADDING);
-  offer.location.y = getRandomNumber(MIN_PIN_Y, MAX_PIN_Y);
+  offer.location.x = window.utils.getRandomNumber(PIN_X_PADDING, map.clientWidth - PIN_X_PADDING);
+  offer.location.y = window.utils.getRandomNumber(MIN_PIN_Y, MAX_PIN_Y);
 
   offer.offer = {};
   offer.offer.title = OFFER_TITLES[index];
   offer.offer.address = offer.location.x + ', ' + offer.location.y;
-  offer.offer.price = getRandomNumber(MIN_PRICE, MAX_PRICE);
-  offer.offer.type = getRandomArrayElement(OFFER_TYPE);
-  offer.offer.rooms = getRandomNumber(MIN_ROOMS, MAX_ROOMS);
-  offer.offer.guests = getRandomNumber(MIN_GUESTS, MAX_GUESTS);
-  offer.offer.checkin = getRandomArrayElement(CHECKIN_TIMES);
-  offer.offer.checkout = getRandomArrayElement(CHECKOUT_TIMES);
-  offer.offer.features = getRandomElements(OFFER_FEATURES);
+  offer.offer.price = window.utils.getRandomNumber(MIN_PRICE, MAX_PRICE);
+  offer.offer.type = window.utils.getRandomArrayElement(OFFER_TYPE);
+  offer.offer.rooms = window.utils.getRandomNumber(MIN_ROOMS, MAX_ROOMS);
+  offer.offer.guests = window.utils.getRandomNumber(MIN_GUESTS, MAX_GUESTS);
+  offer.offer.checkin = window.utils.getRandomArrayElement(CHECKIN_TIMES);
+  offer.offer.checkout = window.utils.getRandomArrayElement(CHECKOUT_TIMES);
+  offer.offer.features = window.utils.getRandomElements(OFFER_FEATURES);
   offer.offer.description = '';
-  offer.offer.photos = getShuffledArray(OFFER_PHOTOS);
+  offer.offer.photos = window.utils.getShuffledArray(OFFER_PHOTOS);
 
   return offer;
 };

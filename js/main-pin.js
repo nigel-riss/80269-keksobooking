@@ -19,6 +19,7 @@
   var minPinY = MIN_Y_COORD - MAIN_PIN_SIZE - MAIN_PIN_ARROW_SIZE;
   var maxPinY = MAX_Y_COORD - MAIN_PIN_SIZE - MAIN_PIN_ARROW_SIZE;
 
+
   /**
    * Set main pin position
    * @param {number} pinX
