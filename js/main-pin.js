@@ -4,7 +4,7 @@
   var MIN_Y_COORD = 130;
   var MAX_Y_COORD = 630;
   var MAIN_PIN_SIZE = 65;
-  var MAIN_PIN_ARROW_SIZE = 16;
+  var MAIN_PIN_ARROW_SIZE = 8;
 
   var pinsContainer = document.querySelector('.map__pins');
   var mainPin = document.querySelector('.map__pin--main');
@@ -16,8 +16,13 @@
   // Calculating boundaries
   var minPinX = 0;
   var maxPinX = Math.floor(pinsContainer.offsetWidth - MAIN_PIN_SIZE);
-  var minPinY = MIN_Y_COORD - MAIN_PIN_SIZE - MAIN_PIN_ARROW_SIZE;
-  var maxPinY = MAX_Y_COORD - MAIN_PIN_SIZE - MAIN_PIN_ARROW_SIZE;
+  // According to specification
+  // var minPinY = MIN_Y_COORD - MAIN_PIN_SIZE - MAIN_PIN_ARROW_SIZE;
+  // var maxPinY = MAX_Y_COORD - MAIN_PIN_SIZE - MAIN_PIN_ARROW_SIZE;
+
+  // According to common sense
+  var minPinY = MIN_Y_COORD - MAIN_PIN_SIZE / 2 - MAIN_PIN_ARROW_SIZE;
+  var maxPinY = MAX_Y_COORD - MAIN_PIN_ARROW_SIZE;
 
 
   /**
@@ -41,20 +46,7 @@
     mainPin.style.top = (pinY) + 'px';
     mainPin.style.left = (pinX) + 'px';
 
-    setAddressField(mainPin.offsetLeft + MAIN_PIN_SIZE / 2, mainPin.offsetTop + MAIN_PIN_SIZE + MAIN_PIN_ARROW_SIZE);
-  };
-
-
-  /**
-   * Setting Address Field
-   * @param {number} x the X coord of main pin
-   * @param {number} y the Y coord of main pin
-   */
-  var setAddressField = function (x, y) {
-    var addressInput = document.querySelector('.ad-form input[name="address"]');
-    x = Math.round(x);
-    y = Math.round(y);
-    addressInput.value = x + ', ' + y;
+    window.form.setAddressField(mainPin.offsetLeft + MAIN_PIN_SIZE / 2, mainPin.offsetTop + MAIN_PIN_SIZE + MAIN_PIN_ARROW_SIZE);
   };
 
 
@@ -77,7 +69,7 @@
       y: mainPin.offsetTop
     };
 
-    window.activateMap();
+    window.main.activate();
 
     document.addEventListener('mousemove', onMouseMove);
     document.addEventListener('mouseup', onMouseUp);
@@ -119,7 +111,7 @@
 
 
   // Setting initial main pin coordinates
-  setAddressField(mainPin.offsetLeft + mainPin.offsetWidth / 2, mainPin.offsetTop + mainPin.offsetHeight / 2);
+  window.form.setAddressField(mainPin.offsetLeft + mainPin.offsetWidth / 2, mainPin.offsetTop + mainPin.offsetHeight / 2);
 
   mainPin.addEventListener('mousedown', onMouseDown);
 })();
