@@ -3,15 +3,9 @@
 (function () {
   var ESC_KEY = 27;
 
-  /**
-   * Render offer card
-   * @return {HTMLElement}
-   */
-  var render = function () {
-    var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
-    var card = cardTemplate.cloneNode(true);
-    return card;
-  };
+  var map = document.querySelector('.map');
+  var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
+  var instance = cardTemplate.cloneNode(true);
 
 
   /**
@@ -61,17 +55,11 @@
 
 
   /**
-   * Return a card
-   * @return {HTMLElement}
-   */
-  var get = function () {
-    return instance;
-  };
-
-  /**
    * Show popup
+   * @param {Object} offerData
    */
-  var show = function () {
+  var show = function (offerData) {
+    fillIn(offerData);
     var filtersContainer = document.querySelector('.map__filters-container');
     map.insertBefore(instance, filtersContainer);
 
@@ -100,14 +88,8 @@
   });
 
 
-  var instance = render();
-  var map = document.querySelector('.map');
-
   window.card = {
-    render: render,
-    fillIn: fillIn,
-    get: get,
-    hide: hide,
-    show: show
+    show: show,
+    hide: hide
   };
 })();

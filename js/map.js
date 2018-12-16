@@ -47,8 +47,7 @@
       mapPins[i].addEventListener('click', function (evt) {
         var pin = evt.currentTarget;
         if (pin.dataset.pinId) {
-          window.card.fillIn(pinsData[pin.dataset.pinId]);
-          window.card.show();
+          window.card.show(pinsData[pin.dataset.pinId]);
         }
       });
     }
