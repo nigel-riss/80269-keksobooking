@@ -12,12 +12,22 @@
   var activate = function () {
     if (!isActivated) {
       isActivated = true;
-      var randomOffersData = window.mockup.generateRandomOffers(OFFERS_COUNT);
-      window.map.addPins(randomOffersData);
-      window.map.addPinsClickListeners();
+      window.backend.load(onDataLoadSuccess, )
       window.map.show();
       window.form.activate();
     }
+  };
+
+
+  var onDataLoadSuccess = function (offersData) {
+    // var randomOffersData = window.mockup.generateRandomOffers(OFFERS_COUNT);
+    window.map.addPins(offersData);
+    window.map.addPinsClickListeners();
+  };
+
+
+  var onDataLoadFail = function (errorMessage) {
+    console.log(errorMessage);
   };
 
 
