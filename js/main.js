@@ -1,10 +1,7 @@
 'use strict';
 
 (function () {
-  var OFFERS_COUNT = 8;
-
   var isActivated = false;
-
 
   /**
    * Activating the application
@@ -12,18 +9,35 @@
   var activate = function () {
     if (!isActivated) {
       isActivated = true;
-      var randomOffersData = window.mockup.generateRandomOffers(OFFERS_COUNT);
-      window.map.addPins(randomOffersData);
-      window.map.addPinsClickListeners();
+      window.backend.load(onDataLoadSuccess, onDataLoadFail);
       window.map.show();
       window.form.activate();
     }
   };
 
 
+  /**
+   * Adds pins and pin click listeners on successfull data load
+   * @param {Object} offersData
+   */
+  var onDataLoadSuccess = function (offersData) {
+    window.map.addPins(offersData);
+    window.map.addPinsClickListeners();
+  };
+
+
+  /**
+   * Shows an error message on failed data load
+   * @param {string} errorMessage
+   */
+  var onDataLoadFail = function (errorMessage) {
+    window.message.showError(errorMessage, 'OK');
+  };
+
+
   // Disabling fieldsets initially
   window.form.setFieldsetsState(false);
-
+  window.form.activate();
 
   window.main = {
     activate: activate

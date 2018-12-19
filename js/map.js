@@ -21,7 +21,9 @@
     var fragment = document.createDocumentFragment();
     for (var i = 0; i < offerData.length; i++) {
       var pin = window.pin.render(offerData[i], i);
-      fragment.appendChild(pin);
+      if (pin) {
+        fragment.appendChild(pin);
+      }
     }
     return fragment;
   };
