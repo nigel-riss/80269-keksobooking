@@ -2,6 +2,7 @@
 
 (function () {
   var isActivated = false;
+  window.message.showSuccess('Всё хорошо прекрасная маркиза');
 
   /**
    * Activating the application

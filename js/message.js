@@ -4,6 +4,21 @@
 
   var showSuccess = function (message) {
     var successTemplate = document.querySelector('#success').content.querySelector('.success');
+    var successWindow = successTemplate.cloneNode(true);
+
+    // fill in
+    successWindow.querySelector('.success__message').textContent = message;
+
+    document.body.appendChild(successWindow);
+
+    setTimeout(function () {
+      hideSuccess(successWindow);
+    }, 2000);
+  };
+
+
+  var hideSuccess = function (successWindow) {
+    document.body.removeChild(successWindow);
   };
 
 
