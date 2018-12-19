@@ -88,7 +88,6 @@
    * Remove popup on ESC
    */
   document.addEventListener('keydown', function (evt) {
-    evt.preventDefault();
     if (evt.keyCode === ESC_KEY) {
       hide();
     }
