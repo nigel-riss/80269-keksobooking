@@ -2,7 +2,6 @@
 
 (function () {
   var isActivated = false;
-  // window.message.showSuccess('Всё хорошо прекрасная маркиза');
 
   /**
    * Activating the application
@@ -38,7 +37,7 @@
 
   // Disabling fieldsets initially
   window.form.setFieldsetsState(false);
-
+  window.form.activate();
 
   window.main = {
     activate: activate

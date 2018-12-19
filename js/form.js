@@ -37,6 +37,37 @@
   };
 
 
+  /**
+   * Handle success on form save
+   */
+  var onFormSaveSuccess = function () {
+
+  }
+
+
+  /**
+   * Harle error on form save
+   */
+  var onFormSaveError = function () {
+
+  }
+
+
+  /**
+   * Hadle form submit event
+   * @param {Event} evt
+   */
+  var onFormSubmit = function (evt) {
+    evt.preventDefault();
+    window.message.showSuccess('try submition neww');
+    // window.backend.save(new FormData(form), )
+  }
+
+
+  var form = document.querySelector('.ad-form');
+  form.addEventListener('submit', onFormSubmit);
+
+
   window.form = {
     setFieldsetsState: setFieldsetsState,
     activate: activate,

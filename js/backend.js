@@ -41,16 +41,16 @@
       if (xhr.status === OK_CODE) {
         onLoad(xhr.response);
       } else {
-        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        onError('Возникла ошибка сервера во время сохранения объявления. Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
+      onError('Произошла ошибка соединения во время сохранения объявления.');
     });
 
     xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      onError('Сохранение объявления не успело выполниться за ' + xhr.timeout + 'мс. Проверьте соединение или попробуйте позже.');
     });
 
     xhr.timeout = 10000;
