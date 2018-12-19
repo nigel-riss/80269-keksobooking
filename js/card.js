@@ -25,9 +25,11 @@
 
     // features
     var featuresList = instance.querySelector('.popup__features');
-    while (featuresList.firstChild) { // cleaning features list
+    // cleaning features list
+    while (featuresList.firstChild) {
       featuresList.removeChild(featuresList.firstChild);
     }
+    // adding new features
     for (var i = 0; i < offerData.offer.features.length; i++) {
       var feature = document.createElement('li');
       feature.classList.add('popup__feature');
@@ -37,12 +39,17 @@
 
     // photos
     var photos = instance.querySelector('.popup__photos');
-    var photosTemplate = photos.removeChild(photos.querySelector('img'));
-    while (photos.firstChild) { // cleaning photos list
+    // cleaning photos list
+    while (photos.firstChild) {
       photos.removeChild(photos.firstChild);
     }
+    // adding new photos
     for (var j = 0; j < offerData.offer.photos.length; j++) {
-      var photo = photosTemplate.cloneNode(true);
+      var photo = document.createElement('img');
+      photo.classList.add('popup__photo');
+      photo.setAttribute('width', '45');
+      photo.setAttribute('height', '40');
+      photo.setAttribute('alt', 'Фотография жилья');
       photo.src = offerData.offer.photos[j];
       photos.appendChild(photo);
     }

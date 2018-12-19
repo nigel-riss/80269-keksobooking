@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var OK_CODE = 200;
+
   var loadURL = 'https://js.dump.academy/keksobooking/data';
   var saveURL = 'https://js.dump.academy/keksobooking';
 
@@ -9,22 +11,22 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === OK_CODE) {
         onLoad(xhr.response);
       } else {
-        onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
+        onError('Возникла ошибка сервера во время загрузки объявлений. Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
       }
     });
 
     xhr.addEventListener('error', function () {
-      onError('Произошла ошибка соединения');
+      onError('Произошла ошибка соединения во время загрузки объявлений.');
     });
 
     xhr.addEventListener('timeout', function () {
-      onError('Запрос не успел выполниться за ' + xhr.timeout + 'мс');
+      onError('Загрузка объявлений не успела выполниться за ' + xhr.timeout + 'мс. Проверьте соединение или попробуйте позже.');
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = 1000;
 
     xhr.open('GET', loadURL);
     xhr.send();
@@ -36,7 +38,7 @@
     xhr.responseType = 'json';
 
     xhr.addEventListener('load', function () {
-      if (xhr.status === 200) {
+      if (xhr.status === OK_CODE) {
         onLoad(xhr.response);
       } else {
         onError('Статус ответа: ' + xhr.status + ' ' + xhr.statusText);
