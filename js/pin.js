@@ -25,7 +25,27 @@
   };
 
 
+  /**
+   * Set pin active style
+   * @param {HTMLElement} pinElement
+   */
+  var activate = function (pinElement) {
+    pinElement.classList.add('map__pin--active');
+  };
+
+
+  /**
+   * Remove pin active style
+   * @param {HTMLElement} pinElement
+   */
+  var reset = function (pinElement) {
+    pinElement.classList.remove('map__pin--active');
+  };
+
+
   window.pin = {
-    render: render
+    render: render,
+    activate: activate,
+    reset: reset
   };
 })();

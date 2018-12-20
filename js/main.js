@@ -37,6 +37,7 @@
 
 
   reset();
+  window.map.activate();
 
 
   window.main = {

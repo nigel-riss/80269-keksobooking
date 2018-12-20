@@ -93,14 +93,40 @@
         var pin = evt.currentTarget;
         if (pin.dataset.pinId) {
           window.card.show(pinsData[pin.dataset.pinId]);
+          resetAllPinsState();
+          window.pin.activate(pin);
         }
       });
     }
   };
 
 
+  /**
+   * Remove all pins active style
+   */
+  var resetAllPinsState = function () {
+    var mapPins = mapPinsElement.querySelectorAll('.map__pin:not(.map__pin--main)');
+    for (var i = 0; i < mapPins.length; i++) {
+      window.pin.reset(mapPins[i]);
+    }
+  };
+
+
+  /**
+   * Filter pins
+   */
+  var filterPins = function () {
+    var pinStates = window.filter.filter(pinsData);
+    var mapPins = mapPinsElement.querySelectorAll('.map__pin:not(.map__pin--main)');
+    for (var i = 0; i < mapPins.length; i++) {
+      mapPins[i].style.display = pinStates[i] ? 'block' : 'none';
+    }
+  };
+
+
   window.map = {
     activate: activate,
-    reset: reset
+    reset: reset,
+    filterPins: filterPins
   };
 })();
