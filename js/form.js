@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var adForm = document.querySelector('.ad-form');
 
   /**
    * Set form fieldsets state
@@ -18,9 +19,17 @@
    * Activate advertisement form
    */
   var activate = function () {
-    var adForm = document.querySelector('.ad-form');
     adForm.classList.remove('ad-form--disabled');
     setFieldsetsState(true);
+  };
+
+
+  /**
+   * Reset advertisement form
+   */
+  var reset = function () {
+    adForm.classList.add('ad-form--disabled');
+    setFieldsetsState(false);
   };
 
 
@@ -41,16 +50,17 @@
    * Handle success on form save
    */
   var onFormSaveSuccess = function () {
-
-  }
+    window.message.showSuccess('Ваше объявление успешно отправлено.');
+  };
 
 
   /**
-   * Harle error on form save
+   * Handle error on form save
+   * @param {string} errorMessage
    */
-  var onFormSaveError = function () {
-
-  }
+  var onFormSaveError = function (errorMessage) {
+    window.message.showError(errorMessage, 'OK');
+  };
 
 
   /**
@@ -59,18 +69,24 @@
    */
   var onFormSubmit = function (evt) {
     evt.preventDefault();
-    window.message.showSuccess('try submition neww');
-    // window.backend.save(new FormData(form), )
-  }
+    window.backend.save(new FormData(form), onFormSaveSuccess, onFormSaveError);
+  };
+
+
+  var onFormReset = function () {
+    window.main.reset();
+  };
 
 
   var form = document.querySelector('.ad-form');
   form.addEventListener('submit', onFormSubmit);
+  form.addEventListener('reset', onFormReset);
 
 
   window.form = {
-    setFieldsetsState: setFieldsetsState,
+    // setFieldsetsState: setFieldsetsState,
     activate: activate,
+    reset: reset,
     setAddressField: setAddressField
   };
 })();
