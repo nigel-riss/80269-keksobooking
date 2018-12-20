@@ -1,10 +1,11 @@
 'use strict';
 
 (function () {
-  var OK_CODE = 200;
 
-  var loadURL = 'https://js.dump.academy/keksobooking/data';
-  var saveURL = 'https://js.dump.academy/keksobooking';
+  var OK_CODE = 200;
+  var LOAD_URL = 'https://js.dump.academy/keksobooking/data';
+  var SAVE_URL = 'https://js.dump.academy/keksobooking';
+  var REQUEST_TIMEOUT = 10000; // in milliseconds
 
 
   /**
@@ -32,9 +33,9 @@
       onError('Загрузка объявлений не успела выполниться за ' + xhr.timeout + 'мс. Проверьте соединение или попробуйте позже.');
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = REQUEST_TIMEOUT;
 
-    xhr.open('GET', loadURL);
+    xhr.open('GET', LOAD_URL);
     xhr.send();
   };
 
@@ -65,9 +66,9 @@
       onError('Сохранение объявления не успело выполниться за ' + xhr.timeout + 'мс. Проверьте соединение или попробуйте позже.');
     });
 
-    xhr.timeout = 10000;
+    xhr.timeout = REQUEST_TIMEOUT;
 
-    xhr.open('POST', saveURL);
+    xhr.open('POST', SAVE_URL);
     xhr.send(data);
   };
 
@@ -76,4 +77,5 @@
     load: load,
     save: save
   };
+
 })();
