@@ -1,50 +1,103 @@
 'use strict';
 
 (function () {
+  var successTemplate = document.querySelector('#success').content.querySelector('.success');
+  var errorTemplate = document.querySelector('#error').content.querySelector('.error');
+  var successWindow;
+  var errorWindow;
+  var mainElement = document.querySelector('main');
 
+  /**
+   * Show success window
+   * @param {string} message
+   */
   var showSuccess = function (message) {
-    var successTemplate = document.querySelector('#success').content.querySelector('.success');
-    var successWindow = successTemplate.cloneNode(true);
+    // Create
+    successWindow = successTemplate.cloneNode(true);
 
-    // fill in
+    // Fill in
     successWindow.querySelector('.success__message').textContent = message;
 
-    document.body.appendChild(successWindow);
+    // Add listeners
+    successWindow.addEventListener('click', hideSuccess);
+    document.addEventListener('keydown', onSuccessEscPress);
 
-    setTimeout(function () {
-      hideSuccess(successWindow);
-    }, 2000);
+    // Append
+    mainElement.appendChild(successWindow);
   };
 
 
-  var hideSuccess = function (successWindow) {
-    document.body.removeChild(successWindow);
+  /**
+   * Remove success message on Esc press
+   * @param {KeyboardEvent} evt
+   */
+  var onSuccessEscPress = function (evt) {
+    if (window.utils.isEscEvent(evt)) {
+      successWindow.removeEventListener('click', hideSuccess);
+      document.removeEventListener('keydown', onSuccessEscPress);
+      hideSuccess();
+    }
   };
 
 
-  var showError = function (message, buttonText, callback) {
-    var errorTemplate = document.querySelector('#error').content.querySelector('.error');
-    var errorWindow = errorTemplate.cloneNode(true);
+  /**
+   * Hide success window
+   */
+  var hideSuccess = function () {
+    mainElement.removeChild(successWindow);
+  };
 
-    // fill in
+
+  /**
+   * Show error window
+   * @param {string} message
+   * @param {string} buttonText
+   */
+  var showError = function (message, buttonText) {
+    // Create
+    errorWindow = errorTemplate.cloneNode(true);
+
+    // Fill in
     errorWindow.querySelector('.error__message').textContent = message;
     var errorWindowButton = errorWindow.querySelector('.error__button');
     errorWindowButton.textContent = buttonText;
 
-    // add listeners
-    errorWindowButton.addEventListener('click', function () {
-      hideError(callback, errorWindow);
-    });
+    // Add listeners
+    errorWindow.addEventListener('click', hideError);
+    document.addEventListener('keydown', onErrorEscPress);
+    errorWindowButton.addEventListener('click', onErrorButtonClick);
 
-    document.body.appendChild(errorWindow);
+    // Append
+    mainElement.appendChild(errorWindow);
   };
 
 
-  var hideError = function (callback, errorWindow) {
-    if (callback) {
-      callback();
+  /**
+   * Remove success message on Esc press
+   * @param {KeyboardEvent} evt
+   */
+  var onErrorEscPress = function (evt) {
+    if (window.utils.isEscEvent(evt)) {
+      hideError();
     }
-    document.body.removeChild(errorWindow);
+  };
+
+
+  /**
+   * Handle error window button click
+   */
+  var onErrorButtonClick = function () {
+    hideError();
+  };
+
+
+  /**
+   * Hide error window
+   */
+  var hideError = function () {
+    errorWindow.removeEventListener('click', hideError);
+    document.removeEventListener('keydown', onErrorEscPress);
+    mainElement.removeChild(errorWindow);
   };
 
 
