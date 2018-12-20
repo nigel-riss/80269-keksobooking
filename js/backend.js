@@ -6,6 +6,12 @@
   var loadURL = 'https://js.dump.academy/keksobooking/data';
   var saveURL = 'https://js.dump.academy/keksobooking';
 
+
+  /**
+   * Load offers data
+   * @param {Function} onLoad
+   * @param {Function} onError
+   */
   var load = function (onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -26,13 +32,19 @@
       onError('Загрузка объявлений не успела выполниться за ' + xhr.timeout + 'мс. Проверьте соединение или попробуйте позже.');
     });
 
-    xhr.timeout = 1000;
+    xhr.timeout = 10000;
 
     xhr.open('GET', loadURL);
     xhr.send();
   };
 
 
+  /**
+   * Send user form data to server
+   * @param {FormData} data
+   * @param {Function} onLoad
+   * @param {Function} onError
+   */
   var save = function (data, onLoad, onError) {
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';

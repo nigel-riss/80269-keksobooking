@@ -1,14 +1,46 @@
 'use strict';
 
 (function () {
+  var map = document.querySelector('.map');
+  var mapPinsElement = document.querySelector('.map__pins');
   var pinsData = [];
 
+
   /**
-   * Show the map
+   * Activate the map
    */
-  var show = function () {
-    var map = document.querySelector('.map');
+  var activate = function () {
+    window.backend.load(onDataLoadSuccess, onDataLoadFail);
     map.classList.remove('map--faded');
+  };
+
+
+  /**
+   * Reset the map
+   */
+  var reset = function () {
+    map.classList.add('map--faded');
+    removePins();
+    pinsData = [];
+  };
+
+
+  /**
+   * Adds pins and pin click listeners on successfull data load
+   * @param {Object} offersData
+   */
+  var onDataLoadSuccess = function (offersData) {
+    addPins(offersData);
+    addPinsClickListeners();
+  };
+
+
+  /**
+   * Shows an error message on failed data load
+   * @param {string} errorMessage
+   */
+  var onDataLoadFail = function (errorMessage) {
+    window.message.showError(errorMessage, 'OK');
   };
 
 
@@ -36,7 +68,18 @@
   var addPins = function (offersData) {
     pinsData = offersData;
     var pinsFragment = renderPinsFragment(offersData);
-    document.querySelector('.map__pins').appendChild(pinsFragment);
+    mapPinsElement.appendChild(pinsFragment);
+  };
+
+
+  /**
+   * Remove all pins but main pin
+   */
+  var removePins = function () {
+    var mapPins = mapPinsElement.querySelectorAll('.map__pin:not(.map__pin--main)');
+    for (var i = 0; i < mapPins.length; i++) {
+      mapPinsElement.removeChild(mapPins[i]);
+    }
   };
 
 
@@ -57,8 +100,7 @@
 
 
   window.map = {
-    show: show,
-    addPins: addPins,
-    addPinsClickListeners: addPinsClickListeners
+    activate: activate,
+    reset: reset
   };
 })();

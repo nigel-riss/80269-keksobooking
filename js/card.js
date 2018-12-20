@@ -1,11 +1,10 @@
 'use strict';
 
 (function () {
-  var ESC_KEY = 27;
-
   var map = document.querySelector('.map');
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var instance = cardTemplate.cloneNode(true);
+  var isShown = false;
 
 
   /**
@@ -69,11 +68,14 @@
     fillIn(offerData);
     var filtersContainer = document.querySelector('.map__filters-container');
     map.insertBefore(instance, filtersContainer);
+    isShown = true;
 
     var popupCloseBtn = map.querySelector('.popup__close');
     popupCloseBtn.addEventListener('click', function () {
       hide();
     });
+
+    document.addEventListener('keydown', onKeyDown);
   };
 
 
@@ -81,18 +83,23 @@
    * Hide popup
    */
   var hide = function () {
-    map.removeChild(instance);
+    if (isShown) {
+      map.removeChild(instance);
+      document.removeEventListener('keydown', onKeyDown);
+      isShown = false;
+    }
   };
+
 
   /**
    * Remove popup on ESC
+   * @param {KeyboardEvent} evt
    */
-  document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ESC_KEY) {
+  var onKeyDown = function (evt) {
+    if (window.utils.isEscEvent(evt)) {
       hide();
     }
-  });
-
+  };
 
   window.card = {
     show: show,
