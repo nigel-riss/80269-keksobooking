@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var isActivated = false;
 
 
@@ -44,4 +45,5 @@
     reset: reset,
     getActiveState: getActiveState
   };
+
 })();

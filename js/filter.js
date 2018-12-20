@@ -5,7 +5,7 @@
   var PRICE_FILTER = 1;
   var ROOMS_FILTER = 2;
   var GUESTS_FILTER = 3;
-  // var WIFI_FILTER = 5;
+  var FEATURES_FILTER = 4;
 
   var LOW_PRICE = 10000;
   var HIGH_PRICE = 50000;
@@ -89,6 +89,28 @@
     return offerData.offer.rooms === parseInt(filtersForm.elements[ROOMS_FILTER].value, 10);
   };
   filterFunctions.push(filterRooms);
+
+
+  /**
+   * Filter offer features
+   * @param {Array} offerData
+   * @return {boolean}
+   */
+  var filterFeatures = function (offerData) {
+    var state = true;
+
+    var featuresFilters = filtersForm.elements[FEATURES_FILTER].elements;
+    for (var i = 0; i < featuresFilters.length; i++) {
+      var isFilterChecked = featuresFilters[i].checked;
+      var filterValue = featuresFilters[i].value;
+      if (isFilterChecked && offerData.offer.features.indexOf(filterValue) < 0) {
+        state = false;
+      }
+    }
+
+    return state;
+  };
+  filterFunctions.push(filterFeatures);
 
 
   /**
