@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var pinTemplate = document.querySelector('#pin').content.querySelector('.map__pin');
 
   /**
@@ -47,4 +48,5 @@
     activate: activate,
     reset: reset
   };
+
 })();

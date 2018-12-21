@@ -122,11 +122,10 @@
 
 
   /**
-   * Show filtered pind
+   * Show filtered pins
    */
   var showFilteredPins = function () {
     var filteredData = window.filter.filter(pinsData);
-    console.log(filteredData);
     addPins(filteredData);
   };
 
@@ -137,4 +136,5 @@
     addPins: addPins,
     showFilteredPins: showFilteredPins
   };
+
 })();

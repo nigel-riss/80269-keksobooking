@@ -157,4 +157,5 @@
     reset: reset,
     filter: filter
   };
+
 })();
