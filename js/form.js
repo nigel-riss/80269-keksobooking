@@ -3,7 +3,7 @@
 (function () {
 
   var adForm = document.querySelector('.ad-form');
-  // console.dir(adForm);
+  var resetButton = document.querySelector('.ad-form__reset');
 
   /**
    * Set form fieldsets state
@@ -30,7 +30,7 @@
    * Reset advertisement form
    */
   var reset = function () {
-    // adForm.reset();
+    adForm.reset();
     adForm.classList.add('ad-form--disabled');
     setFieldsetsState(false);
   };
@@ -78,15 +78,17 @@
 
 
   /**
-   * Handle form reset
+   * Handle reset button click
+   * @param {MouseEvent} evt
    */
-  var onFormReset = function () {
+  var onResetButtonClick = function (evt) {
+    evt.preventDefault();
     window.main.reset();
   };
 
 
   adForm.addEventListener('submit', onFormSubmit);
-  adForm.addEventListener('reset', onFormReset);
+  resetButton.addEventListener('click', onResetButtonClick);
 
 
   window.form = {
