@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var INITIAL_LEFT = 570;
   var INITIAL_TOP = 375;
   var MIN_Y_COORD = 130;
@@ -18,12 +19,6 @@
   // Calculating boundaries
   var minPinX = 0;
   var maxPinX = Math.floor(pinsContainer.offsetWidth - MAIN_PIN_SIZE);
-
-  // According to specification
-  // var minPinY = MIN_Y_COORD - MAIN_PIN_SIZE - MAIN_PIN_ARROW_SIZE;
-  // var maxPinY = MAX_Y_COORD - MAIN_PIN_SIZE - MAIN_PIN_ARROW_SIZE;
-
-  // According to common sense
   var minPinY = MIN_Y_COORD - MAIN_PIN_SIZE / 2 - MAIN_PIN_ARROW_SIZE;
   var maxPinY = MAX_Y_COORD - MAIN_PIN_ARROW_SIZE;
 
@@ -135,4 +130,5 @@
   window.mainPin = {
     reset: reset
   };
+
 })();
