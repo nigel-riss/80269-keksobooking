@@ -3,6 +3,7 @@
 (function () {
 
   var adForm = document.querySelector('.ad-form');
+  // console.dir(adForm);
 
   /**
    * Set form fieldsets state
@@ -29,7 +30,7 @@
    * Reset advertisement form
    */
   var reset = function () {
-    adForm.reset();
+    // adForm.reset();
     adForm.classList.add('ad-form--disabled');
     setFieldsetsState(false);
   };

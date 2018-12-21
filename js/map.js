@@ -33,8 +33,11 @@
    * @param {Object} offersData
    */
   var onDataLoadSuccess = function (offersData) {
+    pinsData = offersData;
+    pinsData.forEach(function (offerData, index) {
+      offerData.id = index;
+    });
     addPins(offersData);
-    addPinsClickListeners();
   };
 
 
@@ -56,7 +59,7 @@
     var fragment = document.createDocumentFragment();
     var numberOfPins = Math.min(offerData.length, MAX_OFFERS_TO_RENDER);
     for (var i = 0; i < numberOfPins; i++) {
-      var pin = window.pin.render(offerData[i], i);
+      var pin = window.pin.render(offerData[i]);
       if (pin) {
         fragment.appendChild(pin);
       }
@@ -70,11 +73,11 @@
    * @param {Array} offersData
    */
   var addPins = function (offersData) {
-    pinsData = offersData;
     // Clean up before adding new pins
     removePins();
     var pinsFragment = renderPinsFragment(offersData);
     mapPinsElement.appendChild(pinsFragment);
+    addPinsClickListeners();
   };
 
 
@@ -118,9 +121,20 @@
   };
 
 
+  /**
+   * Show filtered pind
+   */
+  var showFilteredPins = function () {
+    var filteredData = window.filter.filter(pinsData);
+    console.log(filteredData);
+    addPins(filteredData);
+  };
+
+
   window.map = {
     activate: activate,
     reset: reset,
-    addPins: addPins
+    addPins: addPins,
+    showFilteredPins: showFilteredPins
   };
 })();

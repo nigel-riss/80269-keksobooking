@@ -6,15 +6,14 @@
   /**
    * Render a pin
    * @param {Object} pinData
-   * @param {number} pinID
    * @return {HTMLElement}
    */
-  var render = function (pinData, pinID) {
+  var render = function (pinData) {
     if (!pinData.offer) {
       return null;
     } else {
       var pin = pinTemplate.cloneNode(true);
-      pin.dataset.pinId = pinID;
+      pin.dataset.pinId = pinData.id;
       var pinImage = pin.children[0];
       pin.style.left = (pinData.location.x - pin.clientWidth / 2) + 'px';
       pin.style.top = (pinData.location.y - pin.clientHeight) + 'px';

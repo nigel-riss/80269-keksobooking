@@ -40,20 +40,21 @@
    */
   var onFormInput = function () {
     window.card.hide();
-    // window.map.filterPins();
+    window.map.showFilteredPins();
   };
 
 
   var filter = function (offersData) {
     // Run throught all offers
-    var pinStates = offersData.map(function (offerData) {
+    var filteredOffers = offersData.filter(function (offerData) {
       // Run an offer through all filter functions
       return filterFunctions.reduce(function (state, filterFunction) {
         state = state && filterFunction(offerData);
         return state;
       }, true);
     });
-    return pinStates;
+
+    return filteredOffers;
   };
 
 
