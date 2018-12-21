@@ -52,7 +52,6 @@
    * Handle success on form save
    */
   var onFormSaveSuccess = function () {
-    reset();
     window.main.reset();
     window.message.showSuccess('Ваше объявление успешно отправлено.');
   };

@@ -15,10 +15,32 @@
 
 
   /**
+   * Activate filters form
+   */
+  var activate = function () {
+    for (var i = 0; i < filtersForm.elements.length; i++) {
+      filtersForm.elements[i].disabled = false;
+    }
+  };
+
+
+  /**
+   * Reset filters form
+   */
+  var reset = function () {
+    filtersForm.reset();
+    for (var i = 0; i < filtersForm.elements.length; i++) {
+      filtersForm.elements[i].disabled = true;
+    }
+  };
+
+
+  /**
    * Handle form input
    */
   var onFormInput = function () {
-    window.map.filterPins();
+    window.card.hide();
+    // window.map.filterPins();
   };
 
 
@@ -130,6 +152,8 @@
   filtersForm.addEventListener('input', onFormInput);
 
   window.filter = {
+    activate: activate,
+    reset: reset,
     filter: filter
   };
 })();

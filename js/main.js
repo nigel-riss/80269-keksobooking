@@ -21,6 +21,7 @@
     if (!isActivated) {
       isActivated = true;
       window.map.activate();
+      window.filter.activate();
       window.form.activate();
     }
   };
@@ -32,6 +33,8 @@
   var reset = function () {
     isActivated = false;
     window.map.reset();
+    window.filter.reset();
+    window.form.reset();
     window.mainPin.reset();
     window.card.hide();
   };
