@@ -1,7 +1,18 @@
 'use strict';
 
 (function () {
+
   var isActivated = false;
+
+
+  /**
+   * Return active state of application
+   * @return {boolean}
+   */
+  var getActiveState = function () {
+    return isActivated;
+  };
+
 
   /**
    * Activating the application
@@ -9,37 +20,33 @@
   var activate = function () {
     if (!isActivated) {
       isActivated = true;
-      window.backend.load(onDataLoadSuccess, onDataLoadFail);
-      window.map.show();
+      window.map.activate();
+      window.filter.activate();
       window.form.activate();
     }
   };
 
 
   /**
-   * Adds pins and pin click listeners on successfull data load
-   * @param {Object} offersData
+   * Reset the application
    */
-  var onDataLoadSuccess = function (offersData) {
-    window.map.addPins(offersData);
-    window.map.addPinsClickListeners();
+  var reset = function () {
+    isActivated = false;
+    window.map.reset();
+    window.filter.reset();
+    window.form.reset();
+    window.mainPin.reset();
+    window.card.hide();
   };
 
 
-  /**
-   * Shows an error message on failed data load
-   * @param {string} errorMessage
-   */
-  var onDataLoadFail = function (errorMessage) {
-    window.message.showError(errorMessage, 'OK');
-  };
+  reset();
 
-
-  // Disabling fieldsets initially
-  window.form.setFieldsetsState(false);
-  window.form.activate();
 
   window.main = {
-    activate: activate
+    activate: activate,
+    reset: reset,
+    getActiveState: getActiveState
   };
+
 })();

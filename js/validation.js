@@ -2,12 +2,13 @@
 
 (function () {
 
-  var TIME_TO_PRICE_MAP = {
+  var timeToPriceMap = {
     bungalo: 0,
     flat: 1000,
     house: 5000,
     palace: 10000
   };
+
 
   //
   // Title input validation
@@ -55,7 +56,6 @@
   var addressInput = document.querySelector('.ad-form input[name="address"]');
   addressInput.readOnly = true;
 
-
   //
   // Type select and price input validation
   //
@@ -67,8 +67,8 @@
    * @param {string} type
    */
   var setupPriceInput = function (type) {
-    priceInput.min = TIME_TO_PRICE_MAP[type];
-    priceInput.placeholder = TIME_TO_PRICE_MAP[type];
+    priceInput.min = timeToPriceMap[type];
+    priceInput.placeholder = timeToPriceMap[type];
   };
 
   /**
@@ -135,8 +135,9 @@
     setTimeInputs(index);
   });
 
-  // Setting initial time imputs values
+  // Setting initial time inputs values
   setTimeInputs(0);
+
 
   //
   // Rooms and capacity selects

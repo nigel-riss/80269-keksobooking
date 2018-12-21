@@ -2,6 +2,9 @@
 
 (function () {
 
+  var adForm = document.querySelector('.ad-form');
+  var resetButton = document.querySelector('.ad-form__reset');
+
   /**
    * Set form fieldsets state
    * @param {boolean} isEnabled
@@ -18,16 +21,25 @@
    * Activate advertisement form
    */
   var activate = function () {
-    var adForm = document.querySelector('.ad-form');
     adForm.classList.remove('ad-form--disabled');
     setFieldsetsState(true);
   };
 
 
   /**
+   * Reset advertisement form
+   */
+  var reset = function () {
+    adForm.reset();
+    adForm.classList.add('ad-form--disabled');
+    setFieldsetsState(false);
+  };
+
+
+  /**
    * Setting Address Field
-   * @param {number} x the X coord of main pin
-   * @param {number} y the Y coord of main pin
+   * @param {number} x the X coordinate of main pin
+   * @param {number} y the Y coordinate of main pin
    */
   var setAddressField = function (x, y) {
     var addressInput = document.querySelector('.ad-form input[name="address"]');
@@ -41,36 +53,48 @@
    * Handle success on form save
    */
   var onFormSaveSuccess = function () {
-
-  }
+    window.main.reset();
+    window.message.showSuccess('Ваше объявление успешно отправлено.');
+  };
 
 
   /**
-   * Harle error on form save
+   * Handle error on form save
+   * @param {string} errorMessage
    */
-  var onFormSaveError = function () {
-
-  }
+  var onFormSaveError = function (errorMessage) {
+    window.message.showError(errorMessage, 'OK');
+  };
 
 
   /**
-   * Hadle form submit event
+   * Handle form submit event
    * @param {Event} evt
    */
   var onFormSubmit = function (evt) {
     evt.preventDefault();
-    window.message.showSuccess('try submition neww');
-    // window.backend.save(new FormData(form), )
-  }
+    window.backend.save(new FormData(adForm), onFormSaveSuccess, onFormSaveError);
+  };
 
 
-  var form = document.querySelector('.ad-form');
-  form.addEventListener('submit', onFormSubmit);
+  /**
+   * Handle reset button click
+   * @param {MouseEvent} evt
+   */
+  var onResetButtonClick = function (evt) {
+    evt.preventDefault();
+    window.main.reset();
+  };
+
+
+  adForm.addEventListener('submit', onFormSubmit);
+  resetButton.addEventListener('click', onResetButtonClick);
 
 
   window.form = {
-    setFieldsetsState: setFieldsetsState,
     activate: activate,
+    reset: reset,
     setAddressField: setAddressField
   };
+
 })();

@@ -1,11 +1,18 @@
 'use strict';
 
 (function () {
-  var ESC_KEY = 27;
+
+  var offerTypeMap = {
+    palace: 'Дворец',
+    flat: 'Квартира',
+    house: 'Дом',
+    bungalo: 'Бунгало'
+  };
 
   var map = document.querySelector('.map');
   var cardTemplate = document.querySelector('#card').content.querySelector('.map__card');
   var instance = cardTemplate.cloneNode(true);
+  var isShown = false;
 
 
   /**
@@ -18,7 +25,7 @@
     instance.querySelector('.popup__title').textContent = offerData.offer.title;
     instance.querySelector('.popup__text--address').textContent = offerData.offer.address;
     instance.querySelector('.popup__text--price').textContent = offerData.offer.price + '₽/ночь';
-    instance.querySelector('.popup__type').textContent = window.data.OFFER_TYPE_DICTIONARY[offerData.offer.type];
+    instance.querySelector('.popup__type').textContent = offerTypeMap[offerData.offer.type];
     instance.querySelector('.popup__text--capacity').textContent = offerData.offer.rooms + ' комнаты для ' + offerData.offer.guests + ' гостей';
     instance.querySelector('.popup__text--time').textContent = 'Заезд после ' + offerData.offer.checkin + ' выезд до ' + offerData.offer.checkout;
     instance.querySelector('.popup__description').textContent = offerData.offer.description;
@@ -69,11 +76,14 @@
     fillIn(offerData);
     var filtersContainer = document.querySelector('.map__filters-container');
     map.insertBefore(instance, filtersContainer);
+    isShown = true;
 
     var popupCloseBtn = map.querySelector('.popup__close');
     popupCloseBtn.addEventListener('click', function () {
       hide();
     });
+
+    document.addEventListener('keydown', onKeyDown);
   };
 
 
@@ -81,21 +91,27 @@
    * Hide popup
    */
   var hide = function () {
-    map.removeChild(instance);
+    if (isShown) {
+      map.removeChild(instance);
+      document.removeEventListener('keydown', onKeyDown);
+      isShown = false;
+    }
   };
+
 
   /**
    * Remove popup on ESC
+   * @param {KeyboardEvent} evt
    */
-  document.addEventListener('keydown', function (evt) {
-    if (evt.keyCode === ESC_KEY) {
+  var onKeyDown = function (evt) {
+    if (window.utils.isEscEvent(evt)) {
       hide();
     }
-  });
-
+  };
 
   window.card = {
     show: show,
     hide: hide
   };
+
 })();
