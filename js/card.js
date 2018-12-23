@@ -37,12 +37,12 @@
       featuresList.removeChild(featuresList.firstChild);
     }
     // adding new features
-    for (var i = 0; i < offerData.offer.features.length; i++) {
+    offerData.offer.features.forEach(function (featureValue) {
       var feature = document.createElement('li');
       feature.classList.add('popup__feature');
-      feature.classList.add('popup__feature--' + offerData.offer.features[i]);
+      feature.classList.add('popup__feature--' + featureValue);
       featuresList.appendChild(feature);
-    }
+    });
 
     // photos
     var photos = instance.querySelector('.popup__photos');
@@ -51,15 +51,15 @@
       photos.removeChild(photos.firstChild);
     }
     // adding new photos
-    for (var j = 0; j < offerData.offer.photos.length; j++) {
+    offerData.offer.photos.forEach(function (photoSource) {
       var photo = document.createElement('img');
       photo.classList.add('popup__photo');
       photo.setAttribute('width', '45');
       photo.setAttribute('height', '40');
       photo.setAttribute('alt', 'Фотография жилья');
-      photo.src = offerData.offer.photos[j];
+      photo.src = photoSource;
       photos.appendChild(photo);
-    }
+    });
 
     // avatar
     instance.querySelector('.popup__avatar').src = offerData.author.avatar;
