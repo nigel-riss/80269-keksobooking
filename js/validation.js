@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+  var TITLE_MIN_LENGTH = 30;
 
   var timeToPriceMap = {
     bungalo: 0,
@@ -38,7 +39,7 @@
    */
   var onTitleInputInput = function (evt) {
     var target = evt.target;
-    if (target.value.length < 30) {
+    if (target.value.length < TITLE_MIN_LENGTH) {
       target.setCustomValidity('Минимальная длина — 30 символов. (Введено '
         + target.value.length + ' символов');
     } else {
@@ -112,7 +113,7 @@
 
   /**
    * Set (sync) time inputs
-   * @param {*} index Index of option to set
+   * @param {number} index Index of option to set
    */
   var setTimeInputs = function (index) {
     checkInSelect.options.selectedIndex = index;
