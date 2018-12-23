@@ -40,10 +40,20 @@
    */
   var onFormInput = function () {
     window.card.hide();
-    window.map.showFilteredPins();
+    debounceFiteredRedraw();
   };
 
+  // Create debounce function for filters
+  var debounceFiteredRedraw = window.utils.debounce(function () {
+    window.map.showFilteredPins();
+  });
 
+
+  /**
+   * Filter array of offers according to set filters
+   * @param {Array} offersData
+   * @return {Array}
+   */
   var filter = function (offersData) {
     // Run throught all offers
     var filteredOffers = offersData.filter(function (offerData) {
@@ -84,11 +94,7 @@
         return offerData.offer.price < LOW_PRICE;
 
       case 'middle':
-        if (offerData.offer.price >= LOW_PRICE && offerData.offer.price <= HIGH_PRICE) {
-          return true;
-        } else {
-          return false;
-        }
+        return (offerData.offer.price >= LOW_PRICE) && (offerData.offer.price <= HIGH_PRICE);
 
       case 'high':
         return offerData.offer.price > HIGH_PRICE;
